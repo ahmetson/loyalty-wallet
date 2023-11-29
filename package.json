@@ -20,6 +20,7 @@
     "@types/qrcode": "^1.5.5",
     "@unocss/nuxt": "^0.57.3",
     "@unocss/preset-icons": "^0.57.3",
+    "@vite-pwa/nuxt": "^0.2.3",
     "@vueuse/core": "^10.6.0",
     "@vueuse/nuxt": "^10.6.0",
     "eslint": "^8.53.0",
