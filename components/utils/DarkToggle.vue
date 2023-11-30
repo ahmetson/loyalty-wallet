@@ -15,7 +15,7 @@ function toggleDark() {
 </script>
 
 <template>
-  <UiButton class="p-3" variant="ghost" @click="toggleDark">
+  <UiButton size="sm" class="p-3" variant="outline" @click="toggleDark">
 
     <div class="dark:text-theme-primary i-ic:baseline-brightness-3 dark:i-ic:outline-light-mode" />
   </UiButton>
