@@ -11,6 +11,9 @@ export class CircuitStorageInstance {
       try {
         console.time('check loading circuits from DB')
         await this.instance.loadCircuitData(CircuitId.AuthV2)
+        await this.instance.loadCircuitData(CircuitId.AtomicQueryMTPV2)
+        await this.instance.loadCircuitData(CircuitId.AtomicQuerySigV2)
+        await this.instance.loadCircuitData(CircuitId.StateTransition)
         console.timeEnd('check loading circuits from DB')
         return this.instance
       }
@@ -23,6 +26,9 @@ export class CircuitStorageInstance {
           .then(response => response.arrayBuffer())
           .then(buffer => new Uint8Array(buffer))
         const sig_w = await fetch('./credentialAtomicQuerySigV2/circuit.wasm')
+          .then(response => response.arrayBuffer())
+          .then(buffer => new Uint8Array(buffer))
+        const ts_w = await fetch('./stateTransition/circuit.wasm')
           .then(response => response.arrayBuffer())
           .then(buffer => new Uint8Array(buffer))
 
@@ -39,6 +45,11 @@ export class CircuitStorageInstance {
         )
           .then(response => response.arrayBuffer())
           .then(buffer => new Uint8Array(buffer))
+        const ts_z = await fetch(
+          './stateTransition/circuit_final.zkey',
+        )
+          .then(response => response.arrayBuffer())
+          .then(buffer => new Uint8Array(buffer))
 
         const auth_j = await fetch('./AuthV2/verification_key.json')
           .then(response => response.arrayBuffer())
@@ -50,6 +61,11 @@ export class CircuitStorageInstance {
           .then(buffer => new Uint8Array(buffer))
         const sig_j = await fetch(
           './credentialAtomicQuerySigV2/verification_key.json',
+        )
+          .then(response => response.arrayBuffer())
+          .then(buffer => new Uint8Array(buffer))
+        const ts_j = await fetch(
+          './stateTransition/verification_key.json',
         )
           .then(response => response.arrayBuffer())
           .then(buffer => new Uint8Array(buffer))
@@ -73,6 +89,12 @@ export class CircuitStorageInstance {
           wasm: sig_w,
           provingKey: sig_z,
           verificationKey: sig_j,
+        })
+        await this.instance.saveCircuitData(CircuitId.StateTransition, {
+          circuitId: CircuitId.AtomicQuerySigV2,
+          wasm: ts_w,
+          provingKey: ts_z,
+          verificationKey: ts_j,
         })
         console.timeEnd('CircuitStorageInstance.saveCircuitData')
       }

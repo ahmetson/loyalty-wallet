@@ -12,6 +12,7 @@ import {
 } from '@0xpolygonid/js-sdk'
 import type {
   CircuitData,
+  CircuitStorage,
   CredentialWallet,
   IDataStorage,
   IdentityWallet,
@@ -29,6 +30,7 @@ export class PolygonIdService {
   proofService: ProofService | undefined = undefined
   dataStorage: IDataStorage | undefined = undefined
   authHandler: AuthHandler | undefined = undefined
+  circuitStorage: CircuitStorage | undefined = undefined
 
   static async init() {
     const config = useRuntimeConfig()
@@ -72,6 +74,7 @@ export class PolygonIdService {
         wallet,
         dataStorage,
         authHandler,
+        circuitStorage,
       }
     }
     console.log('Extension services has been initialized', this.instancePS)
