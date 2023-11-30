@@ -1,3 +1,5 @@
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -8,6 +10,8 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@vite-pwa/nuxt',
   ],
+
+  ssr: false,
 
   pwa: {
     registerType: 'autoUpdate',
@@ -35,11 +39,11 @@ export default defineNuxtConfig({
       ],
     },
     devOptions: {
-      enabled: true,
+      enabled: false,
       type: 'module',
     },
     workbox: {
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      globPatterns: ['**/*.{js,css,png,svg,ico}'],
     },
   },
 
