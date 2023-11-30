@@ -10,7 +10,7 @@ export class IdentityServices {
     credential: W3CCredential
   }
 
-  static async createIdentity(seed: Uint8Array) {
+  static async createIdentity(seed?: Uint8Array) {
     if (!this.instanceIS) {
       const polygonService = PolygonIdService.getExtensionServiceInstance()
 
