@@ -89,4 +89,42 @@ export default defineNuxtConfig({
       ],
     },
   },
+
+  runtimeConfig: {
+    // Private keys are only available on the server
+
+    CIRCUITS_PATH: process.env.CIRCUITS_PATH,
+    WALLET_KEY: process.env.WALLET_KEY,
+
+    // Public keys that are exposed to the client
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8080',
+      RHS_URL: process.env.RHS_URL,
+      CONTRACT_ADDRESS: process.env.CONTRACT_ADDRESS,
+      RPC_URL: process.env.RPC_URL,
+      THIRD_WEB_CLIENT_ID: process.env.THIRD_WEB_CLIENT_ID,
+    },
+  },
+
+  vite: {
+    resolve: {
+      alias: {
+        stream: 'stream-browserify',
+        // process: 'process/browser',
+        // util: 'util'
+      },
+    },
+    plugins: [nodePolyfills({
+      // Whether to polyfill `node:` protocol imports.
+      protocolImports: true,
+    })],
+    optimizeDeps: {
+      esbuildOptions: {
+        // Node.js global to browser globalThis
+        define: {
+          global: 'globalThis',
+        },
+      },
+    },
+  },
 })
