@@ -46,12 +46,13 @@ async function createAccountFromPhrase() {
 
   try {
     const identity = await IdentityServices.createIdentity(seed.slice(0, 32))
-    if (accounts.value.filter((v) => v.did.id === identity.did.id).length === 0)
+    if (accounts.value.filter(v => v.did.id === identity.did.id).length === 0)
       accounts.value.push({ name: 'PolygonID account', did: identity.did, isActive: true })
-  } catch(err) {
+  }
+  catch (err) {
     console.log(err)
   }
-  
+
   wallet.value = newWallet
 
   loading.value = false
@@ -65,9 +66,11 @@ async function createAccountFromPhrase() {
     <TextH1>
       Welcome
     </TextH1>
-    <div class="flex gap-4 items-end" >
+    <div class="flex gap-4 items-end">
       <div>
-        <UiLabel for="mnemonic">Phrase</UiLabel>
+        <UiLabel for="mnemonic">
+          Phrase
+        </UiLabel>
         <UiInput id="mnemonic" v-model="mnemonic" type="text" />
       </div>
 

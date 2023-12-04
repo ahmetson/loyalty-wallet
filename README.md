@@ -1,75 +1,52 @@
-# Nuxt 3 Minimal Starter
+# Loyalty system
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Loyalty system app is WEB3 loyalty system to cooperate brands and clients ....
 
-## Setup
+## Environment
 
-Make sure to install the dependencies:
-
+To setup env variables copy .env.example as .env file
 ```bash
-# npm
-npm install
+copy .env.exmaple .env
+```
+## Enable PWA
 
-# pnpm
+To enable PWA, we need to set "enabled" flag to true in nuxt.config.ts
+
+```ts
+devOptions: {
+      enabled: false,
+      type: 'module',
+}
+```
+## Run in dev environment
+
+Install dependencies
+```bash
 pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
+To start application
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+pnpm dev
 ```
 
-## Production
+## To create wallet
 
-Build the application for production:
+On [welcome page](http//:localhost:3000/welcome) click "Create account button".
 
-```bash
-# npm
-npm run build
+## To enter with seed phrase
 
-# pnpm
-pnpm run build
+On [welcome page](http//:localhost:3000/welcome) fill "Phrase" field and click on "From seed phrase" button.
 
-# yarn
-yarn build
+## To test PWA
 
-# bun
-bun run build
-```
+On Chrome browser open [Devices DevTools](chrome://inspect/#devices) and connect your phone with usb to your computer, with application running on 3000 port (by default).
 
-Locally preview production build:
+> Click on "Port forwarding..." button
 
-```bash
-# npm
-npm run preview
+![Alt text](image.png)
 
-# pnpm
-pnpm run preview
+> Add "localhost:3000" in this window
 
-# yarn
-yarn preview
+![Alt text](image-1.png)
 
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+> Then you can open localhost:3000 on your phone browser. And there will be a promt to install app.

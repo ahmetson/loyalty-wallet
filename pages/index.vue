@@ -11,9 +11,9 @@ const { accounts, issuers, credentials, generateProof, issueCredentials, deleteC
       <TextH2>Accounts</TextH2>
     </div>
 
-    <div class="w-full flex flex-col">
+    <div class="w-full flex flex-col gap-4">
       <div v-for="account in accounts" :key="account.did.id" class="flex flex-col bg-indigo px-4 py-4 rounded-xl gap-4">
-        <div class="flex justify-between">
+        <div class="flex gap-2 justify-between">
           <TextP class="truncate max-w-full bg-muted/50 px-2 rounded-md">
             {{ account.did.id }}
           </TextP>
@@ -22,11 +22,17 @@ const { accounts, issuers, credentials, generateProof, issueCredentials, deleteC
           </UiButton>
         </div>
         <div v-if="credentials" class="space-y-2">
-          <div v-for="cred in credentials" :key="cred.id" class="flex gap-2 justify-between">
-            {{ cred.credentialSubject.type }}
-            {{ cred.issuanceDate }}
-            {{ cred.expirationDate }}
-            <div class="space-x-2">
+          <div v-for="cred in credentials" :key="cred.id" class="flex flex-col gap-2 justify-between bg-muted/50 p-2 rounded-md">
+            <div class="flex items-center justify-between">
+              <p class="truncate m-0">
+                {{ cred.credentialSubject.type }}
+              </p>
+              <p class="truncate max-w-100px m-0">
+                {{ cred.issuanceDate }}
+              </p>
+            </div>
+
+            <div class="flex gap-2 items-end justify-end">
               <UiButton
                 size="sm"
                 @click="generateProof(cred as W3CCredential, new core.DID(issuers.find(v => {
