@@ -20,7 +20,7 @@ export class IdentityServices {
         networkId: core.NetworkId.Mumbai,
         revocationOpts: {
           type: CredentialStatusType.Iden3ReverseSparseMerkleTreeProof,
-          id: config.public.POLYGON_RPC_URL,
+          id: config.public.POLYGON_RPC_URL as string,
         },
         seed,
       })
