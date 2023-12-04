@@ -5,6 +5,7 @@ import { abi } from '~/lib/abi'
 import { IdentityServices } from '~/lib/identity.service'
 import { PolygonIdService } from '~/lib/polygon-id.service'
 import type { Account } from '~/types/account'
+import useWallet from "~/composables/useWallet";
 
 export default () => {
   const config = useRuntimeConfig()
@@ -95,7 +96,7 @@ export default () => {
 
       const { proof, vp } = await proofService!.generateProof(proofReqSig, new core.DID(currentAccount.did))
 
-      const ethSigner = wallet.value.connect(new JsonRpcProvider(config.public.ETH_RPC_URL))
+      const ethSigner = wallet.value.connect(new JsonRpcProvider(config.public.ETH_RPC_URL as string))
 
       const contract = new Contract('0xb5b9ae9e80bddaa7477eb06785295123a8bdb2cd', abi, ethSigner)
       const result = await contract.submitPersonalData('0xb5b9ae9e80bddaa7477eb06785295123a8bdb2cd', ZeroHash, JSON.stringify(proof))
@@ -113,7 +114,7 @@ export default () => {
 
   async function updateCredentials() {
     const { credWallet } = await PolygonIdService.getExtensionServiceInstance()
-    credentials.value = await credWallet!.list()
+    credentials.value = await credWallet!.filterByCredentialSubject(await credWallet!.list(), new core.DID(currentAccount.did))
   }
 
   onMounted(async () => {
