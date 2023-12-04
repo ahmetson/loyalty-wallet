@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@unocss/nuxt',
     '@vite-pwa/nuxt',
+    '@pinia/nuxt',
   ],
 
   ssr: false,
@@ -39,7 +40,7 @@ export default defineNuxtConfig({
       ],
     },
     devOptions: {
-      enabled: true,
+      enabled: false,
       type: 'module',
     },
     workbox: {
