@@ -1,95 +1,8 @@
 <script setup lang="ts">
-import { type HDNodeWallet, Wallet, ethers } from 'ethers'
-import { CircuitId, CredentialStatusType, ProofService, core } from '@0xpolygonid/js-sdk'
-import type { CredentialRequest, EthStateStorage, IProofService, ZeroKnowledgeProofRequest } from '@0xpolygonid/js-sdk'
-import type { Account } from '~/types/account'
-import { IdentityServices } from '~/lib/identity.service'
-import { PolygonIdService } from '~/lib/polygon-id.service'
+import type { W3CCredential } from '@0xpolygonid/js-sdk'
+import { core } from '@0xpolygonid/js-sdk'
 
-const config = useRuntimeConfig()
-
-const qrText = ref<string>('test')
-const accounts = useLocalStorage<Account[]>('accounts', [] as Account[])
-const currentAccount = ref<Account>(accounts.value.filter(v => v.isActive === true)[0])
-const wallet = useLocalStorage<HDNodeWallet>('wallet', {} as HDNodeWallet)
-
-async function issueCredentials(account: Account) {
-  const { wallet: idWallet, credWallet, dataStorage, circuitStorage, proofService } = PolygonIdService.getExtensionServiceInstance()
-  const { did: issuerDID } = await IdentityServices.createIdentity()
-
-  const claimReq: CredentialRequest = {
-    credentialSchema:
-	'https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json/KYCAgeCredential-v2.json',
-    type: 'KYCAgeCredential',
-    credentialSubject: {
-      id: new core.DID(account.did).string(),
-      birthday: 19960424,
-      documentType: 99,
-    },
-    expiration: 1893526400,
-    revocationOpts: {
-      type: CredentialStatusType.Iden3ReverseSparseMerkleTreeProof,
-      id: config.public.RHS_URL,
-    },
-  }
-
-  const issuerCred = await idWallet?.issueCredential(issuerDID, claimReq)
-
-  if (issuerCred && dataStorage) {
-    await credWallet?.save(issuerCred)
-
-    const res = await idWallet?.addCredentialsToMerkleTree(
-      [issuerCred],
-      issuerDID,
-    )
-    await idWallet?.publishStateToRHS(issuerDID, config.public.RHS_URL)
-
-    // wallet.value.connect()
-    const jsonRpc = (dataStorage.states as EthStateStorage).provider
-    console.log(wallet.value)
-    const signer = ethers.Wallet.fromPhrase(wallet.value.mnemonic!.phrase).connect(jsonRpc)
-    console.log(signer)
-
-    if (res && res.oldTreeState) {
-      const proofService: IProofService = new ProofService(idWallet!, credWallet!, circuitStorage!, dataStorage.states, { ipfsNodeURL: 'https://ipfs.io' })
-
-      const txId = await proofService.transitState(
-        issuerDID,
-        res.oldTreeState,
-        true,
-        dataStorage.states,
-        signer,
-      )
-
-      console.log(txId)
-
-      const proofReqSig: ZeroKnowledgeProofRequest = {
-        id: 1,
-        circuitId: CircuitId.AtomicQuerySigV2,
-        optional: false,
-        query: {
-          allowedIssuers: ['*'],
-          type: claimReq.type,
-          context:
-          'https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v3.json-ld',
-          credentialSubject: {
-            documentType: {
-              $eq: 99,
-            },
-          },
-        },
-      }
-
-      setTimeout(async () => {
-        const { proof, vp } = await proofService.generateProof(proofReqSig, new core.DID(account.did))
-
-        console.log(proof, vp)
-      }, 5000)
-    }
-  }
-
-  console.log(await credWallet?.list())
-}
+const { accounts, issuers, credentials, generateProof, issueCredentials, deleteCredential } = usePolygonID()
 </script>
 
 <template>
@@ -100,13 +13,38 @@ async function issueCredentials(account: Account) {
 
     <div class="w-full flex flex-col">
       <div v-for="account in accounts" :key="account.did.id" class="flex flex-col bg-indigo px-4 py-4 rounded-xl gap-4">
-        <TextP class="truncate max-w-full bg-muted/50 px-2 rounded-md">
-          {{ account.did.id }}
-        </TextP>
-        <div class="flex justify-end">
-          <UiButton class="bg-transparent border-border/20" variant="outline" size="sm" @click="issueCredentials(account)">
+        <div class="flex justify-between">
+          <TextP class="truncate max-w-full bg-muted/50 px-2 rounded-md">
+            {{ account.did.id }}
+          </TextP>
+          <UiButton class="border-border/20" variant="default" size="sm" @click="issueCredentials(account)">
             Issue credential
           </UiButton>
+        </div>
+        <div v-if="credentials" class="space-y-2">
+          <div v-for="cred in credentials" :key="cred.id" class="flex gap-2 justify-between">
+            {{ cred.credentialSubject.type }}
+            {{ cred.issuanceDate }}
+            {{ cred.expirationDate }}
+            <div class="space-x-2">
+              <UiButton
+                size="sm"
+                @click="generateProof(cred as W3CCredential, new core.DID(issuers.find(v => {
+                  console.log(v, cred.issuer.slice(14), v.did.id === cred.issuer.slice(14))
+                  return v.did.id === cred.issuer.slice(14)
+                })?.did))"
+              >
+                Generate Proof
+              </UiButton>
+              <UiButton
+                variant="destructive"
+                size="sm"
+                @click="deleteCredential(cred as W3CCredential)"
+              >
+                Delete
+              </UiButton>
+            </div>
+          </div>
         </div>
       </div>
     </div>
