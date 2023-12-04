@@ -5,7 +5,6 @@ import { abi } from '~/lib/abi'
 import { IdentityServices } from '~/lib/identity.service'
 import { PolygonIdService } from '~/lib/polygon-id.service'
 import type { Account } from '~/types/account'
-import useWallet from "~/composables/useWallet";
 
 export default () => {
   const config = useRuntimeConfig()
@@ -63,7 +62,9 @@ export default () => {
     if (!wallet.value)
       throw new Error('No wallet')
 
-    const signer = wallet.value.connect(jsonRpc)
+    console.log(wallet.value, typeof wallet.value)
+
+    const signer = Wallet.fromPhrase(wallet.value.mnemonic.phrase).connect(jsonRpc)
     console.log(signer)
 
     if (res && res.oldTreeState) {
@@ -96,7 +97,7 @@ export default () => {
 
       const { proof, vp } = await proofService!.generateProof(proofReqSig, new core.DID(currentAccount.did))
 
-      const ethSigner = wallet.value.connect(new JsonRpcProvider(config.public.ETH_RPC_URL as string))
+      const ethSigner = Wallet.fromPhrase(wallet.value.mnemonic.phrase).connect(new JsonRpcProvider(config.public.ETH_RPC_URL))
 
       const contract = new Contract('0xb5b9ae9e80bddaa7477eb06785295123a8bdb2cd', abi, ethSigner)
       const result = await contract.submitPersonalData('0xb5b9ae9e80bddaa7477eb06785295123a8bdb2cd', ZeroHash, JSON.stringify(proof))
