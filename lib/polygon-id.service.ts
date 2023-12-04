@@ -36,7 +36,7 @@ export class PolygonIdService {
     const config = useRuntimeConfig()
 
     const defaultEthConnectionConfig = [{
-      url: config.public.RPC_URL,
+      url: config.public.POLYGON_RPC_URL,
       defaultGasLimit: 600000,
       minGasPrice: '0',
       maxGasPrice: '100000000000',
