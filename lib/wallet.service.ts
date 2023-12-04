@@ -1,29 +1,11 @@
-import {
-  AgentResolver,
-  BjjProvider,
-  CredentialStatusResolverRegistry,
-  CredentialStatusType,
-  CredentialStorage,
-  CredentialWallet,
-  EthStateStorage, type IDataStorage,
-  IdentityStorage,
-  IdentityWallet,
-  IndexedDBDataSource,
-  IndexedDBPrivateKeyStore,
-  IssuerResolver,
-  KMS,
-  KmsKeyType,
-  MerkleTreeIndexedDBStorage,
-  OnChainResolver,
-  RHSResolver
-} from '@0xpolygonid/js-sdk'
+import { AgentResolver, BjjProvider, CredentialStatusResolverRegistry, CredentialStatusType, CredentialStorage, CredentialWallet, EthStateStorage, type IDataStorage, IdentityStorage, IdentityWallet, IndexedDBDataSource, IndexedDBPrivateKeyStore, IssuerResolver, KMS, KmsKeyType, MerkleTreeIndexedDBStorage, OnChainResolver, RHSResolver } from '@0xpolygonid/js-sdk'
 
 export class WalletService {
   static async createWallet() {
     const config = useRuntimeConfig()
 
     const defaultEthConnectionConfig = [{
-      url: config.public.RPC_URL,
+      url: config.public.POLYGON_RPC_URL,
       defaultGasLimit: 600000,
       minGasPrice: '0',
       maxGasPrice: '100000000000',
