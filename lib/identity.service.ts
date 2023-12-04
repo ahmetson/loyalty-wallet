@@ -2,8 +2,6 @@ import type { W3CCredential } from '@0xpolygonid/js-sdk'
 import { CredentialStatusType, IdentityStorage, core } from '@0xpolygonid/js-sdk'
 import { PolygonIdService } from './polygon-id.service'
 
-const config = useRuntimeConfig()
-
 export class IdentityServices {
   static instanceIS: {
     did: core.DID
@@ -13,6 +11,8 @@ export class IdentityServices {
   static async createIdentity(seed?: Uint8Array) {
     if (!this.instanceIS) {
       const polygonService = PolygonIdService.getExtensionServiceInstance()
+
+      const config = useRuntimeConfig()
 
       const identity = await polygonService.wallet?.createIdentity({
         method: core.DidMethod.PolygonId,
