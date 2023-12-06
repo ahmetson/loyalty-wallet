@@ -15,6 +15,7 @@ const wallet = useLocalStorage<HDNodeWallet>('wallet', {} as HDNodeWallet)
 const mnemonic = ref<string>('')
 
 const loading = ref<boolean>(false)
+const { progress } = usePolygonID()
 
 async function createAccount() {
   loading.value = true
@@ -29,8 +30,6 @@ async function createAccount() {
 
   accounts.value.push({ name: 'PolygonID account', did: identity.did, isActive: true })
   wallet.value = newWallet
-
-  loading.value = false
 
   router.push('/')
 }
@@ -55,8 +54,6 @@ async function createAccountFromPhrase() {
 
   wallet.value = newWallet
 
-  loading.value = false
-
   router.push('/')
 }
 
@@ -66,31 +63,39 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center py-6 px-4 gap-4">
+  <div class="h-full flex flex-col items-center justify-center py-6 px-4 gap-4">
     <TextH1>
       Welcome
     </TextH1>
-    <div class="flex gap-4 items-end">
-      <div>
-        <UiLabel for="mnemonic">
-          Phrase
-        </UiLabel>
-        <UiInput id="mnemonic" v-model="mnemonic" type="text" />
+    <div v-if="progress === 100" class="flex flex-col gap-4 items-center">
+      <div class="flex gap-2 items-end">
+        <div>
+          <UiLabel for="mnemonic">
+            Phrase
+          </UiLabel>
+          <UiInput id="mnemonic" v-model="mnemonic" type="text" />
+        </div>
+
+        <UiButton :disabled="loading" @click="createAccountFromPhrase">
+          <span v-if="loading" class="i-mingcute:loading-3-fill mr-2 h-4 w-4 animate-spin" />
+          From seed phrase
+        </UiButton>
       </div>
 
-      <UiButton :disabled="loading" @click="createAccountFromPhrase">
-        From seed phrase
-      </UiButton>
+      <div class="">
+        or
+      </div>
 
-      <UiButton :disabled="loading" @click="createAccount">
+      <UiButton class="w-full" :disabled="loading" @click="createAccount">
+        <span v-if="loading" class="i-mingcute:loading-3-fill mr-2 h-4 w-4 animate-spin" />
         Create account
       </UiButton>
     </div>
 
-    <div v-if="wallet && phrase">
-      {{ wallet.address }}
-      {{ wallet.mnemonic }}
-      {{ wallet.publicKey }}
+    <div v-else class="w-full flex items-center justify-center">
+      <div class="w-[60%]">
+        <UiProgress v-model="progress" />
+      </div>
     </div>
   </div>
 </template>

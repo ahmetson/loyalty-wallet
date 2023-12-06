@@ -10,6 +10,8 @@ const { $on } = useNuxtApp()
 const { contract } = useLoyaltyContract()
 const { wallet } = useWallet()
 
+const { progress } = usePolygonID()
+
 // Refs
 const sheet = ref<VNode>()
 const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
@@ -50,10 +52,18 @@ onMounted(() => {
 <template>
   <div class="h-screen flex flex-col">
     <Header />
-    <div class="max-w-[1400px] flex-1 w-full mx-auto overflow-auto">
+    <div v-if="progress === 100" class="max-w-[1400px] flex-1 w-full mx-auto overflow-auto">
       <slot />
     </div>
-    <Footer />
+    <div v-else class="w-full h-full flex flex-col gap-6 items-center justify-center">
+      <TextH1>
+        Loyalty Web3
+      </TextH1>
+      <div class="w-[60%]">
+        <UiProgress v-model="progress" />
+      </div>
+    </div>
+    <Footer v-if="progress === 100" />
   </div>
   <component :is="sheet" />
 </template>

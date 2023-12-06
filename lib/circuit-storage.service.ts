@@ -2,6 +2,7 @@ import { CircuitId, CircuitStorage, IndexedDBDataSource } from '@0xpolygonid/js-
 
 export class CircuitStorageInstance {
   static instance: CircuitStorage
+  static progress = ref(0)
 
   static async init() {
     if (!this.instance) {
@@ -11,10 +12,15 @@ export class CircuitStorageInstance {
       try {
         console.time('check loading circuits from DB')
         await this.instance.loadCircuitData(CircuitId.AuthV2)
+        this.progress.value += 25
         await this.instance.loadCircuitData(CircuitId.AtomicQueryMTPV2)
+        this.progress.value += 25
         await this.instance.loadCircuitData(CircuitId.AtomicQuerySigV2)
+        this.progress.value += 25
         await this.instance.loadCircuitData(CircuitId.StateTransition)
+        this.progress.value += 25
         console.timeEnd('check loading circuits from DB')
+        console.log(this.progress)
         return this.instance
       }
       catch (e) {
@@ -31,6 +37,8 @@ export class CircuitStorageInstance {
         const ts_w = await fetch('./stateTransition/circuit.wasm')
           .then(response => response.arrayBuffer())
           .then(buffer => new Uint8Array(buffer))
+
+        this.progress.value += 25
 
         const auth_z = await fetch('./AuthV2/circuit_final.zkey')
           .then(response => response.arrayBuffer())
@@ -51,6 +59,8 @@ export class CircuitStorageInstance {
           .then(response => response.arrayBuffer())
           .then(buffer => new Uint8Array(buffer))
 
+        this.progress.value += 25
+
         const auth_j = await fetch('./AuthV2/verification_key.json')
           .then(response => response.arrayBuffer())
           .then(buffer => new Uint8Array(buffer))
@@ -69,6 +79,8 @@ export class CircuitStorageInstance {
         )
           .then(response => response.arrayBuffer())
           .then(buffer => new Uint8Array(buffer))
+
+        this.progress.value += 25
         console.timeEnd('CircuitStorageInstance.init')
         // this.instanceCS = new CircuitStorage(new InMemoryDataSource());
         console.time('CircuitStorageInstance.saveCircuitData')
@@ -96,6 +108,7 @@ export class CircuitStorageInstance {
           provingKey: ts_z,
           verificationKey: ts_j,
         })
+        this.progress.value += 25
         console.timeEnd('CircuitStorageInstance.saveCircuitData')
       }
     }

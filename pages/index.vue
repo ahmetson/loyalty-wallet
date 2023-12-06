@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import type { W3CCredential } from '@0xpolygonid/js-sdk'
 import { core } from '@0xpolygonid/js-sdk'
+import type { Account } from '~/types/account'
 
 const { accounts, issuers, credentials, generateProof, issueCredentials, deleteCredential } = usePolygonID()
+
+const loading = ref(false)
+
+async function getGredential(acc: Account) {
+  loading.value = true
+  await issueCredentials(acc)
+  loading.value = false
+}
 </script>
 
 <template>
@@ -17,7 +26,8 @@ const { accounts, issuers, credentials, generateProof, issueCredentials, deleteC
           <TextP class="truncate max-w-full bg-muted/50 px-2 rounded-md">
             {{ account.did.id }}
           </TextP>
-          <UiButton class="border-border/20" variant="default" size="sm" @click="issueCredentials(account)">
+          <UiButton :disabled="loading" class="border-border/20" variant="default" size="sm" @click="getGredential(account)">
+            <span v-if="loading" class="i-mingcute:loading-3-fill mr-2 h-4 w-4 animate-spin" />
             Issue credential
           </UiButton>
         </div>
@@ -33,15 +43,6 @@ const { accounts, issuers, credentials, generateProof, issueCredentials, deleteC
             </div>
 
             <div class="flex gap-2 items-end justify-end">
-              <UiButton
-                size="sm"
-                @click="generateProof(cred as W3CCredential, new core.DID(issuers.find(v => {
-                  console.log(v, cred.issuer.slice(14), v.did.id === cred.issuer.slice(14))
-                  return v.did.id === cred.issuer.slice(14)
-                })?.did))"
-              >
-                Generate Proof
-              </UiButton>
               <UiButton
                 variant="destructive"
                 size="sm"

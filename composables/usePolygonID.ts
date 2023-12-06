@@ -2,6 +2,7 @@ import type { CredentialRequest, EthStateStorage, IProofService, W3CCredential, 
 import { CircuitId, CredentialStatusType, ProofService, core } from '@0xpolygonid/js-sdk'
 import { Contract, InfuraProvider, JsonRpcProvider, Network, Wallet, ZeroHash } from 'ethers'
 import { abi } from '~/lib/abi'
+import { CircuitStorageInstance } from '~/lib/circuit-storage.service'
 import { IdentityServices } from '~/lib/identity.service'
 import { PolygonIdService } from '~/lib/polygon-id.service'
 import type { Account } from '~/types/account'
@@ -13,6 +14,7 @@ export default () => {
   const currentAccount = reactive<Account>(accounts.value.filter(v => v.isActive === true)[0])
   const credentials = ref<W3CCredential[]>([])
   const issuers = useLocalStorage<Account[]>('issuers', [])
+  const progress = ref(CircuitStorageInstance.progress)
 
   const { wallet } = useWallet()
 
@@ -120,8 +122,11 @@ export default () => {
   }
 
   async function updateCredentials() {
-    const { credWallet } = await PolygonIdService.getExtensionServiceInstance()
-    credentials.value = await credWallet!.filterByCredentialSubject(await credWallet!.list(), new core.DID(currentAccount.did))
+    if (currentAccount) {
+      const { credWallet } = await PolygonIdService.getExtensionServiceInstance()
+
+      credentials.value = await credWallet!.filterByCredentialSubject(await credWallet!.list(), new core.DID(currentAccount.did))
+    }
   }
 
   onMounted(async () => {
@@ -136,6 +141,7 @@ export default () => {
     accounts,
     issuers,
     credentials,
+    progress,
 
     issueCredentials,
     deleteCredential,
