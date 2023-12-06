@@ -52,7 +52,6 @@ onMounted(async () => {
     if (receiptId === props.exchange.receiptId) {
       exchange.value.state = ExchangeState.Success
       console.log(shop, user, receiptId)
-      setTimeout(() => $emit('notification:destroy'), 2000)
     }
   })
 })
