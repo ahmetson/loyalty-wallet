@@ -1,16 +1,14 @@
-import type { HDNodeWallet } from 'ethers'
+import type { HDNodeWallet, ethers } from 'ethers'
 import { HDNodeVoidWallet, Wallet } from 'ethers'
+
+let wallet: ethers.HDNodeWallet
 
 export default () => {
   const saved = useLocalStorage<HDNodeWallet>('wallet', {} as HDNodeWallet)
-  const wallet = ref<HDNodeWallet>()
-
-  onMounted(() => {
-    if (saved.value.mnemonic && saved.value.mnemonic.phrase && !wallet.value) {
-      console.log('wallet defined')
-      wallet.value = Wallet.fromPhrase(saved.value.mnemonic.phrase)
-    }
-  })
+  if (saved.value.mnemonic && saved.value.mnemonic.phrase && !wallet) {
+    console.log('wallet defined')
+    wallet = Wallet.fromPhrase(saved.value.mnemonic.phrase)
+  }
 
   return {
     wallet,

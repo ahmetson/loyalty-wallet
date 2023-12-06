@@ -16,7 +16,7 @@ withDefaults(defineProps<Props>(), {
 <template>
   <component
     :is="as"
-    :class="cn(buttonVariants({ variant, size }), $attrs.class ?? '')"
+    :class="cn(buttonVariants({ variant, size }), $attrs.class ?? '', 'rounded-md')"
   >
     <slot />
   </component>

@@ -102,9 +102,9 @@ export default defineNuxtConfig({
       apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8080',
       RHS_URL: process.env.RHS_URL,
       CONTRACT_ADDRESS: process.env.CONTRACT_ADDRESS,
+      LOYALTY_CONTRACT_ADDRESS: process.env.LOYALTY_CONTRACT_ADDRESS,
       POLYGON_RPC_URL: process.env.POLYGON_RPC_URL,
       ETH_RPC_URL: process.env.ETH_RPC_URL,
-      THIRD_WEB_CLIENT_ID: process.env.THIRD_WEB_CLIENT_ID,
     },
   },
 

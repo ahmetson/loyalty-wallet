@@ -48,26 +48,26 @@ export default () => {
 
   async function generateProof(credential: W3CCredential, issuerDID: core.DID) {
     const { wallet: idWallet, dataStorage, proofService } = PolygonIdService.getExtensionServiceInstance()
-    const res = await idWallet?.addCredentialsToMerkleTree(
-      [credential],
-      issuerDID,
-    )
 
-    console.log(issuerDID)
-    await idWallet?.publishStateToRHS(issuerDID, config.public.RHS_URL)
+    try {
+      const res = await idWallet?.addCredentialsToMerkleTree(
+        [credential],
+        new core.DID(issuerDID),
+      )
 
-    // wallet.value.connect()
-    const jsonRpc = (dataStorage?.states as EthStateStorage).provider
+      if (!res || !res.oldTreeState)
+        throw new Error('Cannot add to MerkleTree')
 
-    if (!wallet.value)
-      throw new Error('No wallet')
+      await idWallet?.publishStateToRHS(issuerDID, config.public.RHS_URL)
 
-    console.log(wallet.value, typeof wallet.value)
+      // wallet.value.connect()
+      const jsonRpc = (dataStorage?.states as EthStateStorage).provider
 
-    const signer = Wallet.fromPhrase(wallet.value.mnemonic.phrase).connect(jsonRpc)
-    console.log(signer)
+      if (!wallet || !wallet.mnemonic)
+        throw new Error('No wallet')
 
-    if (res && res.oldTreeState) {
+      const signer = wallet.connect(jsonRpc)
+
       const txId = await proofService!.transitState(
         issuerDID,
         res.oldTreeState,
@@ -75,33 +75,39 @@ export default () => {
         dataStorage!.states,
         signer,
       )
-
       console.log(txId)
+    }
+    catch (e) {
+      console.log(e)
+    }
 
-      const proofReqSig: ZeroKnowledgeProofRequest = {
-        id: 1,
-        circuitId: CircuitId.AtomicQuerySigV2,
-        optional: false,
-        query: {
-          allowedIssuers: ['*'],
-          type: credential.credentialSubject.type,
-          context:
-          'https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v3.json-ld',
-          credentialSubject: {
-            documentType: {
-              $eq: 99,
-            },
+    const proofReqSig: ZeroKnowledgeProofRequest = {
+      id: 1,
+      circuitId: CircuitId.AtomicQuerySigV2,
+      optional: false,
+      query: {
+        allowedIssuers: ['*'],
+        type: credential.credentialSubject.type,
+        context:
+        'https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v3.json-ld',
+        credentialSubject: {
+          documentType: {
+            $eq: 99,
           },
         },
-      }
+      },
+    }
 
-      const { proof, vp } = await proofService!.generateProof(proofReqSig, new core.DID(currentAccount.did))
+    const proof = await proofService!.generateProof(proofReqSig, new core.DID(currentAccount.did))
 
-      const ethSigner = Wallet.fromPhrase(wallet.value.mnemonic.phrase).connect(new JsonRpcProvider(config.public.ETH_RPC_URL))
+    const sigProofOk = await proofService!.verifyProof(
+      proof,
+      CircuitId.AtomicQuerySigV2, // or CircuitId.AtomicQueryMTPV2
+    )
 
-      const contract = new Contract('0xb5b9ae9e80bddaa7477eb06785295123a8bdb2cd', abi, ethSigner)
-      const result = await contract.submitPersonalData('0xb5b9ae9e80bddaa7477eb06785295123a8bdb2cd', ZeroHash, JSON.stringify(proof))
-      console.log(result)
+    return {
+      proof,
+      sigProofOk,
     }
   }
 
