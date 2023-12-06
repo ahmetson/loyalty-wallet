@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ExchangeState } from '~/components/core'
-import ExchangeSheet from '~/components/core/ExchangeSheet.vue'
+import { useToast } from '~/components/ui/toast/use-toast'
 import type { Exchange } from '~/types/exchange'
 
 // Nuxt plugins
@@ -9,6 +9,7 @@ const { $on } = useNuxtApp()
 // Composables
 const { contract } = useLoyaltyContract()
 const { wallet } = useWallet()
+const { toast } = useToast()
 
 const { progress } = usePolygonID()
 
@@ -33,16 +34,29 @@ onMounted(() => {
 
       exchanges.value.push(exchange.value)
 
-      sheet.value = h(ExchangeSheet, {
-        'exchange': exchange.value,
-        'defaultOpen': true,
-        'onVnodeBeforeUnmount': () => {
-          console.log('unmounted')
-        },
-        'onUpdate:exchange': (v: Exchange) => {
-          exchange.value = v
-        },
+      toast({
+        title: 'Exchange request',
+        description: `Received exchange request from shop: ${exchange.value.shop} \n Points: ${exchange.value.points}`,
       })
+    }
+  })
+
+  contract.on(contract.filters.Exchanged, (shop: string, user: string, receiptId: string) => {
+    if (user === wallet.address) {
+      const newExchanges = exchanges.value.map((v) => {
+        if (v.receiptId === receiptId) {
+          v.state = ExchangeState.Success
+          toast({
+            title: 'Exchange success',
+            description: 'Successfuly exchanged points for KYCAgeCredential',
+          })
+          return v
+        }
+
+        return v
+      })
+
+      exchanges.value = newExchanges
     }
   })
   $on('notification:destroy', () => sheet.value = undefined)
@@ -65,5 +79,6 @@ onMounted(() => {
     </div>
     <Footer v-if="progress === 100" />
   </div>
+  <UiToaster />
   <component :is="sheet" />
 </template>

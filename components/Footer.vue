@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { ExchangeState } from './core'
+import type { Exchange } from '~/types/exchange'
+
 const router = useRouter()
+
+const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
 </script>
 
 <template>
@@ -17,8 +22,9 @@ const router = useRouter()
       </NuxtLink>
       <NuxtLink to="/exchange">
         <UiButton variant="link">
-          <div class="flex flex-col items-center gap-1" :class="{ '!text-accent': router.currentRoute.value.path === '/exchange' }">
+          <div class="relative flex flex-col items-center gap-1" :class="{ '!text-accent': router.currentRoute.value.path === '/exchange' }">
             <div class="i-carbon:status-change text-xl" />
+            <div v-if="exchanges.filter(v => [ExchangeState.Idle].includes(v.state)).length > 0" class="absolute w-[12px] h-[12px] rounded-full bg-accent animate-ping top-0 right-[30%]" />
             <TextSmall>
               Exchanges
             </TextSmall>
