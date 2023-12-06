@@ -1,39 +1,8 @@
 <script setup lang="ts">
 import type { W3CCredential } from '@0xpolygonid/js-sdk'
 import { core } from '@0xpolygonid/js-sdk'
-import { ethers } from 'ethers'
-import type { VNode } from 'vue'
-import LoyaltyRequestSheet from '~/components/core/LoyaltyRequestSheet.vue'
-
-const { $on } = useNuxtApp()
 
 const { accounts, issuers, credentials, generateProof, issueCredentials, deleteCredential } = usePolygonID()
-
-const { contract } = useLoyaltyContract()
-const { wallet } = useWallet()
-
-const sheet = ref<VNode>()
-
-onMounted(() => {
-  if (!contract)
-    throw new Error('Contract not defined')
-  contract.on(contract.filters.AnnounceLoyaltyPoints, (shop: string, user: string, receiptId: string, points: bigint, dataFormatId: bigint) => {
-    console.log(shop, typeof shop, user, typeof user, receiptId, typeof receiptId, points, typeof points, dataFormatId, typeof dataFormatId)
-    if (user === wallet.address) {
-      sheet.value = h(LoyaltyRequestSheet, {
-        shop,
-        user,
-        receiptId,
-        points: ethers.formatEther(points),
-        dataFormatId: ethers.formatEther(dataFormatId),
-        onVnodeBeforeUnmount: () => {
-          console.log('unmounted')
-        },
-      })
-    }
-  })
-  $on('notification:destroy', () => sheet.value = undefined)
-})
 </script>
 
 <template>
@@ -43,7 +12,7 @@ onMounted(() => {
     </div>
 
     <div class="w-full flex flex-col gap-3">
-      <div v-for="account in accounts" :key="account.did.id" class="flex flex-col bg-indigo px-3 py-3 rounded-xl gap-3">
+      <div v-for="account in accounts" :key="account.did.id" class="flex flex-col bg-gradient-to-br from-emerald-600 to-teal-900 px-3 py-3 rounded-xl gap-3">
         <div class="flex gap-2 justify-between">
           <TextP class="truncate max-w-full bg-muted/50 px-2 rounded-md">
             {{ account.did.id }}
@@ -85,6 +54,5 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <component :is="sheet" />
   </div>
 </template>

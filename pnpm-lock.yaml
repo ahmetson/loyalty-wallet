@@ -49,6 +49,9 @@ devDependencies:
   '@iconify-json/carbon':
     specifier: ^1.1.21
     version: 1.1.21
+  '@iconify-json/clarity':
+    specifier: ^1.1.11
+    version: 1.1.11
   '@iconify-json/ic':
     specifier: ^1.1.14
     version: 1.1.14
@@ -2293,6 +2296,12 @@ packages:
 
   /@iconify-json/carbon@1.1.21:
     resolution: {integrity: sha512-bK2cMVM4noBU+FGlay433flpXLRzQu0ED095iAnoO6ka3yb4uz0lvb8acpN5gthyGLJ89C4HpfIbQZLQnMKQww==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/clarity@1.1.11:
+    resolution: {integrity: sha512-dOIvr0P7kjrSKD9Nk6h97GTT9ZHxXj+ED40QRPzHe1aMURzaYivOp4prEB+dNAmhLlCa+ApqGeqmCOYfVhLB0g==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true

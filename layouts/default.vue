@@ -1,38 +1,59 @@
 <script setup lang="ts">
-import type { HDNodeWallet } from 'ethers'
-import { DarkToggle } from '~/components/utils'
+import { ExchangeState } from '~/components/core'
+import ExchangeSheet from '~/components/core/ExchangeSheet.vue'
+import type { Exchange } from '~/types/exchange'
 
+// Nuxt plugins
+const { $on } = useNuxtApp()
+
+// Composables
+const { contract } = useLoyaltyContract()
 const { wallet } = useWallet()
+
+// Refs
+const sheet = ref<VNode>()
+const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
+
+onMounted(() => {
+  if (!contract)
+    throw new Error('Contract not defined')
+  contract.on(contract.filters.AnnounceLoyaltyPoints, (shop: string, user: string, receiptId: string, points: bigint, dataFormatId: bigint) => {
+    console.log(shop, typeof shop, user, typeof user, receiptId, typeof receiptId, points, typeof points, dataFormatId, typeof dataFormatId)
+    if (user === wallet.address) {
+      const exchange = ref<Exchange>({
+        shop,
+        user,
+        receiptId,
+        points: Number(points).toString(),
+        dataFormatId: Number(dataFormatId).toString(),
+        state: ExchangeState.Idle,
+      })
+
+      exchanges.value.push(exchange.value)
+
+      sheet.value = h(ExchangeSheet, {
+        'exchange': exchange.value,
+        'defaultOpen': true,
+        'onVnodeBeforeUnmount': () => {
+          console.log('unmounted')
+        },
+        'onUpdate:exchange': (v: Exchange) => {
+          exchange.value = v
+        },
+      })
+    }
+  })
+  $on('notification:destroy', () => sheet.value = undefined)
+})
 </script>
 
 <template>
   <div class="h-screen flex flex-col">
-    <header class="border-b border-border">
-      <div class="max-w-[1400px] w-full mx-auto py-4 px-2 flex justify-end overflow-hidden">
-        <div class="flex items-center gap-4">
-          <TextCode v-if="wallet" class="truncate max-w-[150px]">
-            {{ wallet.address }}
-          </TextCode>
-          <DarkToggle />
-        </div>
-      </div>
-    </header>
+    <Header />
     <div class="max-w-[1400px] flex-1 w-full mx-auto overflow-auto">
       <slot />
     </div>
-    <footer class="flex items-center h-[60px] bottom-0 left-0 w-full bg-background/50 border-t border-border">
-      <nav class="flex space-x-4">
-        <NuxtLink to="/">
-          <UiButton variant="link">
-            QR Code
-          </UiButton>
-        </NuxtLink>
-        <NuxtLink to="/scan">
-          <UiButton variant="link">
-            Scan
-          </UiButton>
-        </NuxtLink>
-      </nav>
-    </footer>
+    <Footer />
   </div>
+  <component :is="sheet" />
 </template>
