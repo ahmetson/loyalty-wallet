@@ -77,7 +77,6 @@ export class PolygonIdService {
         circuitStorage,
       }
     }
-    console.log('Extension services has been initialized', this.instancePS)
     return this.instancePS
   }
 

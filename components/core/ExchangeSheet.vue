@@ -46,7 +46,6 @@ async function sendProof() {
 }
 
 onMounted(async () => {
-  console.log('Exchange')
   if (!contract)
     throw new Error('Contract not defined')
   contract.on(contract.filters.Exchanged, (shop: string, user: string, receiptId: string) => {

@@ -4,8 +4,6 @@ export class WalletService {
   static async createWallet() {
     const config = useRuntimeConfig()
 
-    console.log(config)
-
     const defaultEthConnectionConfig = [{
       url: config.public.POLYGON_RPC_URL,
       defaultGasLimit: 600000,
