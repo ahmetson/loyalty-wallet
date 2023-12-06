@@ -63,11 +63,11 @@ const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
     <div v-if="exchanges.filter(v => v.state === ExchangeState.Success || v.state === ExchangeState.Error).length > 0" class="w-full flex flex-col gap-3">
       <div v-for="exchange in exchanges.filter(v => v.state === ExchangeState.Success || v.state === ExchangeState.Error)" :key="exchange.receiptId" class="flex flex-col bg-gradient-to-br from-emerald-600 px-3 py-3 rounded-xl gap-3 filter-grayscale">
         <ExchangeSheet :exchange="exchange" :default-open="false">
-          <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="flex flex-col sm:flex-row justify-between items-center">
             <TextH4 class="truncate">
               KYCAgeCredential
             </TextH4>
-            <div class="flex flex-col md:flex-row items-center gap-2">
+            <div class="flex flex-col sm:flex-row items-center gap-2">
               <TextSmall>
                 {{ exchange.state }}
               </TextSmall>

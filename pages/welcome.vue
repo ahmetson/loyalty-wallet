@@ -59,6 +59,10 @@ async function createAccountFromPhrase() {
 
   router.push('/')
 }
+
+definePageMeta({
+  layout: 'welcome',
+})
 </script>
 
 <template>
