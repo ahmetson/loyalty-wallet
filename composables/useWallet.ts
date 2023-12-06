@@ -1,5 +1,5 @@
 import type { HDNodeWallet, ethers } from 'ethers'
-import { HDNodeVoidWallet, Wallet } from 'ethers'
+import { Wallet } from 'ethers'
 
 let wallet: ethers.HDNodeWallet
 
