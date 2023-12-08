@@ -66,7 +66,7 @@ async function claimCredential(ev: Event) {
           <UiInput v-model="values[credField.name]" v-maska :placeholder="credField.mask" :data-maska="credField.mask" :type="credField.type" />
         </div>
         <UiSheetFooter>
-          <UiButton type="submit">
+          <UiButton :disabled="loading" type="submit">
             <span v-if="loading" class="i-mingcute:loading-3-fill mr-2 h-4 w-4 animate-spin" />
             Claim
           </UiButton>
