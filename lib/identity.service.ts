@@ -9,6 +9,8 @@ export class IdentityServices {
   }
 
   static async createIdentity(seed?: Uint8Array) {
+    console.log(seed)
+
     if (!this.instanceIS) {
       const polygonService = PolygonIdService.getExtensionServiceInstance()
 

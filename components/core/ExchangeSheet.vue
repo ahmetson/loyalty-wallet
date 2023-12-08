@@ -40,6 +40,7 @@ async function sendProof() {
   })?.did))
   if (!response)
     throw new Error('Proof generation blocked')
+  console.log(response.proof, exchange.value.user, exchange.value.receiptId, 1)
   const result = await contract.submitPersonalData(props.exchange.shop, props.exchange.receiptId, JSON.stringify(response.proof))
   console.log(result, response.proof, response.sigProofOk)
   exchange.value.state = ExchangeState.Await

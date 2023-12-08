@@ -26,6 +26,7 @@ onMounted(() => {
   contract.on(contract.filters.AnnounceLoyaltyPoints, (shop: string, user: string, receiptId: string, points: bigint, dataFormatId: bigint) => {
     console.log(shop, typeof shop, user, typeof user, receiptId, typeof receiptId, points, typeof points, dataFormatId, typeof dataFormatId)
     if (user === wallet.address) {
+      console.log('received')
       const exchange = ref<Exchange>({
         shop,
         user,
