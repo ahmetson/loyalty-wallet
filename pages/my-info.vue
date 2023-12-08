@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { W3CCredential } from '@0xpolygonid/js-sdk'
+import CredentialClaimSheet from '~/components/core/CredentialClaimSheet.vue'
 import { integerDate } from '~/lib/utils'
 
 interface CredentialDataFieldDescription {
@@ -21,6 +22,9 @@ const TypeToField = new Map<string, CredentialDataFieldDescription>([
   <div class="h-full flex py-4 flex-col gap-6 px-6">
     <div class="flex items-center justify-between">
       <TextH2>Info</TextH2>
+      <CredentialClaimSheet>
+        <div class="i-carbon:add text-[32px]" />
+      </CredentialClaimSheet>
     </div>
     <div class="space-y-3">
       <div v-for="cred in credentials" :key="cred.id" class="flex text-white items-center justify-between bg-gradient-to-br from-emerald-700 to-teal-800 p-2 rounded">

@@ -1,7 +1,5 @@
-import type { CredentialRequest, EthStateStorage, IProofService, W3CCredential, ZeroKnowledgeProofRequest } from '@0xpolygonid/js-sdk'
-import { CircuitId, CredentialStatusType, ProofService, core } from '@0xpolygonid/js-sdk'
-import { Contract, InfuraProvider, JsonRpcProvider, Network, Wallet, ZeroHash, randomBytes } from 'ethers'
-import { abi } from '~/lib/abi'
+import type { CredentialRequest, EthStateStorage, W3CCredential, ZeroKnowledgeProofRequest } from '@0xpolygonid/js-sdk'
+import { CircuitId, core } from '@0xpolygonid/js-sdk'
 import { CircuitStorageInstance } from '~/lib/circuit-storage.service'
 import { IdentityServices } from '~/lib/identity.service'
 import { PolygonIdService } from '~/lib/polygon-id.service'
@@ -12,35 +10,19 @@ export default () => {
 
   const accounts = useLocalStorage<Account[]>('accounts', [])
   const currentAccount = reactive<Account>(accounts.value.filter(v => v.isActive === true)[0])
-  const credentials = ref<W3CCredential[]>([])
+  const credentials = useLocalStorage<W3CCredential[]>('credentials', [])
   const issuers = useLocalStorage<Account[]>('issuers', [])
   const progress = ref(CircuitStorageInstance.progress)
 
   const { wallet } = useWallet()
 
-  async function issueCredentials(account: Account) {
+  async function issueCredentials(account: Account, claims: CredentialRequest) {
     const { wallet: idWallet, credWallet, dataStorage } = PolygonIdService.getExtensionServiceInstance()
     const { did: issuerDID } = await IdentityServices.createIdentity()
 
     issuers.value.push({ name: 'Issuer', did: issuerDID, isActive: false })
 
-    const claimReq: CredentialRequest = {
-      credentialSchema:
-	'https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json/KYCAgeCredential-v2.json',
-      type: 'KYCAgeCredential',
-      credentialSubject: {
-        id: new core.DID(account.did).string(),
-        birthday: 19960424,
-        documentType: 99,
-      },
-      expiration: 1893526400,
-      revocationOpts: {
-        type: CredentialStatusType.Iden3ReverseSparseMerkleTreeProof,
-        id: config.public.RHS_URL,
-      },
-    }
-
-    const issuerCred = await idWallet?.issueCredential(issuerDID, claimReq)
+    const issuerCred = await idWallet?.issueCredential(issuerDID, claims)
 
     if (issuerCred && dataStorage)
       await credWallet?.save(issuerCred)
@@ -123,6 +105,7 @@ export default () => {
 
   async function updateCredentials() {
     if (currentAccount) {
+      console.log('updating credentials')
       const { credWallet } = await PolygonIdService.getExtensionServiceInstance()
 
       credentials.value = await credWallet!.filterByCredentialSubject(await credWallet!.list(), new core.DID(currentAccount.did))
@@ -142,7 +125,6 @@ export default () => {
     issuers,
     credentials,
     progress,
-
     issueCredentials,
     deleteCredential,
     generateProof,
