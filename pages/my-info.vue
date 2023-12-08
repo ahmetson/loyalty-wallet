@@ -15,6 +15,10 @@ const TypeToField = new Map<string, CredentialDataFieldDescription>([
     field: 'birthday',
     type: integerDate,
   }],
+  ['KYCCountryOfResidenceCredential', {
+    field: 'countryCode',
+    type: v => v,
+  }],
 ])
 </script>
 

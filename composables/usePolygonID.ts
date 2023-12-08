@@ -105,7 +105,6 @@ export default () => {
 
   async function updateCredentials() {
     if (currentAccount) {
-      console.log('updating credentials')
       const { credWallet } = await PolygonIdService.getExtensionServiceInstance()
 
       credentials.value = await credWallet!.filterByCredentialSubject(await credWallet!.list(), new core.DID(currentAccount.did))

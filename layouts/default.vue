@@ -39,7 +39,7 @@ onMounted(() => {
 
       toast({
         title: 'Exchange request',
-        description: h('div', ['Received exchange request from shop: ', h(Code, exchange.value.shop), `\n Points: ${exchange.value.points}`]),
+        description: h('div', ['Received exchange request from shop: ', h(Code, () => exchange.value.shop), `\n Points: ${exchange.value.points}`]),
       })
     }
   })
