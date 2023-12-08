@@ -95,7 +95,6 @@ export default defineNuxtConfig({
     // Private keys are only available on the server
 
     CIRCUITS_PATH: process.env.CIRCUITS_PATH,
-    WALLET_KEY: process.env.WALLET_KEY,
 
     // Public keys that are exposed to the client
     public: {
