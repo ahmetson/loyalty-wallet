@@ -44,7 +44,7 @@ export default defineNuxtConfig({
       type: 'module',
     },
     workbox: {
-      globPatterns: ['**/*.{js,css,png,svg,ico}'],
+      globPatterns: ['**/*.{js,css,svg,ico}'],
     },
   },
 
@@ -105,6 +105,7 @@ export default defineNuxtConfig({
       LOYALTY_CONTRACT_ADDRESS: process.env.LOYALTY_CONTRACT_ADDRESS,
       POLYGON_RPC_URL: process.env.POLYGON_RPC_URL,
       ETH_RPC_URL: process.env.ETH_RPC_URL,
+      ETH_WS_URL: process.env.ETH_WS_URL,
     },
   },
 

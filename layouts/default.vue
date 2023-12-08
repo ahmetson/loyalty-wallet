@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ExchangeState } from '~/components/core'
+import { Code } from '~/components/typography'
 import { useToast } from '~/components/ui/toast/use-toast'
 import type { Exchange } from '~/types/exchange'
 
 // Nuxt plugins
 const { $on } = useNuxtApp()
+const config = useRuntimeConfig()
 
 // Composables
 const { contract } = useLoyaltyContract()
@@ -18,6 +20,7 @@ const sheet = ref<VNode>()
 const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
 
 onMounted(() => {
+  console.log(config)
   if (!contract)
     throw new Error('Contract not defined')
   contract.on(contract.filters.AnnounceLoyaltyPoints, (shop: string, user: string, receiptId: string, points: bigint, dataFormatId: bigint) => {
@@ -36,7 +39,7 @@ onMounted(() => {
 
       toast({
         title: 'Exchange request',
-        description: `Received exchange request from shop: ${exchange.value.shop} \n Points: ${exchange.value.points}`,
+        description: h('div', ['Received exchange request from shop: ', h(Code, exchange.value.shop), `\n Points: ${exchange.value.points}`]),
       })
     }
   })
@@ -48,7 +51,7 @@ onMounted(() => {
           v.state = ExchangeState.Success
           toast({
             title: 'Exchange success',
-            description: 'Successfuly exchanged points for KYCAgeCredential',
+            description: `You received your ${v.points} from Sony`,
           })
           return v
         }
@@ -64,9 +67,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="h-screen flex flex-col">
+  <div class="h-screen relative">
     <Header />
-    <div v-if="progress === 100" class="max-w-[1400px] flex-1 w-full mx-auto overflow-auto">
+    <div v-if="progress === 100" class="max-w-[1400px] mb-15 w-full mx-auto overflow-y-auto">
       <slot />
     </div>
     <div v-else class="w-full h-full flex flex-col gap-6 items-center justify-center">

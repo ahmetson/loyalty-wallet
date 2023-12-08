@@ -20,7 +20,6 @@ export class CircuitStorageInstance {
         await this.instance.loadCircuitData(CircuitId.StateTransition)
         this.progress.value += 25
         console.timeEnd('check loading circuits from DB')
-        console.log(this.progress)
         return this.instance
       }
       catch (e) {

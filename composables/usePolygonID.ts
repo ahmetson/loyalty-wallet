@@ -1,6 +1,6 @@
 import type { CredentialRequest, EthStateStorage, IProofService, W3CCredential, ZeroKnowledgeProofRequest } from '@0xpolygonid/js-sdk'
 import { CircuitId, CredentialStatusType, ProofService, core } from '@0xpolygonid/js-sdk'
-import { Contract, InfuraProvider, JsonRpcProvider, Network, Wallet, ZeroHash } from 'ethers'
+import { Contract, InfuraProvider, JsonRpcProvider, Network, Wallet, ZeroHash, randomBytes } from 'ethers'
 import { abi } from '~/lib/abi'
 import { CircuitStorageInstance } from '~/lib/circuit-storage.service'
 import { IdentityServices } from '~/lib/identity.service'
@@ -93,8 +93,8 @@ export default () => {
         context:
         'https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v3.json-ld',
         credentialSubject: {
-          documentType: {
-            $eq: 99,
+          birthday: {
+            $lt: 20050101,
           },
         },
       },

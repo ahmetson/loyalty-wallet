@@ -1,4 +1,4 @@
-import { JsonRpcProvider, Wallet, ethers } from 'ethers'
+import { Wallet, WebSocketProvider, ethers } from 'ethers'
 import { abi } from '~/lib/abi'
 
 let ethSigner: ethers.Signer
@@ -8,7 +8,7 @@ export default () => {
   const config = useRuntimeConfig()
 
   const { wallet } = useWallet()
-  const rpc = new JsonRpcProvider(config.public.ETH_RPC_URL)
+  const rpc = new WebSocketProvider(config.public.ETH_WS_URL)
 
   if (!wallet || !wallet.mnemonic)
     throw new Error('Wallet not defined')

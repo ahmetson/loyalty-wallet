@@ -14,10 +14,10 @@ const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
     <div class="flex items-center justify-between">
       <TextH3>Requested</TextH3>
     </div>
-    <div v-if="exchanges.filter((v) => v.state !== ExchangeState.Success && v.state !== ExchangeState.Error).length > 0" class="w-full flex flex-col gap-3">
-      <div v-for="exchange in exchanges.filter((v) => v.state !== ExchangeState.Success && v.state !== ExchangeState.Error)" :key="exchange.receiptId" class="flex flex-col bg-gradient-to-br from-emerald-600 to-teal-700 dark:to-transparent px-3 py-3 rounded-xl gap-3">
+    <div v-if="exchanges.filter((v) => ![ExchangeState.Error, ExchangeState.Rejected, ExchangeState.Success].includes(v.state)).length > 0" class="w-full flex flex-col gap-3">
+      <div v-for="exchange in exchanges.filter((v) => ![ExchangeState.Error, ExchangeState.Rejected, ExchangeState.Success].includes(v.state))" :key="exchange.receiptId" class="flex flex-col bg-gradient-to-br from-emerald-700 to-teal-800 dark:to-transparent px-3 py-3 rounded-xl gap-3">
         <ExchangeSheet :exchange="exchange" :default-open="false">
-          <div class="flex flex-col sm:flex-row justify-between items-center mb-2">
+          <div class="flex flex-col sm:flex-row justify-between items-center mb-2 text-white">
             <TextH4 class="truncate">
               KYCAgeCredential
             </TextH4>
@@ -32,7 +32,7 @@ const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
               </TextCode>
             </div>
           </div>
-          <div class="flex gap-2 justify-between">
+          <div class="flex gap-2 justify-between text-white">
             <div class="truncate flex gap-2 items-center">
               Shop:
               <TextSmall class="truncate max-w-150px bg-muted/50 px-2 rounded-md py-2 uppercase">
@@ -55,15 +55,15 @@ const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
         No requested exchanges.
       </TextMuted>
     </div>
-    <div v-if="exchanges.filter(v => v.state === ExchangeState.Success || v.state === ExchangeState.Error).length > 0" class="flex items-center justify-between">
+    <div v-if="exchanges.filter(v => [ExchangeState.Error, ExchangeState.Rejected, ExchangeState.Success].includes(v.state)).length > 0" class="flex items-center justify-between">
       <TextH3>
         Fulfilled
       </TextH3>
     </div>
-    <div v-if="exchanges.filter(v => v.state === ExchangeState.Success || v.state === ExchangeState.Error).length > 0" class="w-full flex flex-col gap-3">
-      <div v-for="exchange in exchanges.filter(v => v.state === ExchangeState.Success || v.state === ExchangeState.Error)" :key="exchange.receiptId" class="flex flex-col bg-gradient-to-br from-emerald-600 to-teal-700 dark:to-transparent px-3 py-3 rounded-xl gap-3 filter-grayscale-70">
+    <div v-if="exchanges.filter(v => [ExchangeState.Error, ExchangeState.Rejected, ExchangeState.Success].includes(v.state)).length > 0" class="w-full flex flex-col gap-3">
+      <div v-for="exchange in exchanges.filter(v => [ExchangeState.Error, ExchangeState.Rejected, ExchangeState.Success].includes(v.state))" :key="exchange.receiptId" class="flex flex-col bg-gradient-to-br from-emerald-600 to-teal-800 dark:to-transparent px-3 py-3 rounded-xl gap-3 filter-grayscale">
         <ExchangeSheet :exchange="exchange" :default-open="false">
-          <div class="flex flex-col sm:flex-row justify-between items-center mb-2">
+          <div class="flex flex-col sm:flex-row justify-between items-center mb-2 text-white">
             <TextH4 class="truncate">
               KYCAgeCredential
             </TextH4>
@@ -78,7 +78,7 @@ const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
               </TextCode>
             </div>
           </div>
-          <div class="flex gap-2 justify-between">
+          <div class="flex gap-2 justify-between text-white">
             <div class="truncate flex gap-2 items-center">
               Shop:
               <TextSmall class="truncate max-w-150px bg-muted/50 px-2 rounded-md py-2 uppercase">
