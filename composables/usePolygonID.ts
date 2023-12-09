@@ -3,6 +3,7 @@ import { CircuitId, core } from '@0xpolygonid/js-sdk'
 import { CircuitStorageInstance } from '~/lib/circuit-storage.service'
 import { IdentityServices } from '~/lib/identity.service'
 import { PolygonIdService } from '~/lib/polygon-id.service'
+import { proofRequests } from '~/lib/proof-requests'
 import type { Account } from '~/types/account'
 
 export default () => {
@@ -30,7 +31,7 @@ export default () => {
     await updateCredentials()
   }
 
-  async function generateProof(credential: W3CCredential, issuerDID: core.DID) {
+  async function generateProof(credential: W3CCredential, proofReq: ZeroKnowledgeProofRequest, issuerDID: core.DID) {
     const { wallet: idWallet, dataStorage, proofService } = PolygonIdService.getExtensionServiceInstance()
 
     try {
@@ -65,24 +66,7 @@ export default () => {
       console.log(e)
     }
 
-    const proofReqSig: ZeroKnowledgeProofRequest = {
-      id: 1,
-      circuitId: CircuitId.AtomicQuerySigV2,
-      optional: false,
-      query: {
-        allowedIssuers: ['*'],
-        type: credential.credentialSubject.type,
-        context:
-        'https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v3.json-ld',
-        credentialSubject: {
-          birthday: {
-            $lt: 20050101,
-          },
-        },
-      },
-    }
-
-    const proof = await proofService!.generateProof(proofReqSig, new core.DID(currentAccount.did))
+    const proof = await proofService!.generateProof(proofReq, new core.DID(currentAccount.did))
 
     const sigProofOk = await proofService!.verifyProof(
       proof,

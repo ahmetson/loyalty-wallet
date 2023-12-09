@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { core } from '@0xpolygonid/js-sdk'
-import type { W3CCredential } from '@0xpolygonid/js-sdk'
+import type { W3CCredential, ZeroKnowledgeProofRequest } from '@0xpolygonid/js-sdk'
 import { ExchangeState } from '.'
 import type { Exchange } from '~/types/exchange'
+import { proofRequests } from '~/lib/proof-requests'
 
 const props = defineProps<{
   exchange: Exchange
@@ -35,7 +36,8 @@ const credential = computed<W3CCredential>(() => {
 async function sendProof() {
   exchange.value.state = ExchangeState.Proof
   console.log('click')
-  const response = await generateProof(credential.value, new core.DID(issuers.value.find((v) => {
+  const proofReq = proofRequests.get(exchange.value.credentialId) as ZeroKnowledgeProofRequest
+  const response = await generateProof(credential.value, proofReq, new core.DID(issuers.value.find((v) => {
     return v.did.id === credential.value.issuer.slice(14)
   })?.did))
   if (!response)

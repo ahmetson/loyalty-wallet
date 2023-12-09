@@ -31,6 +31,7 @@ onMounted(() => {
         shop,
         user,
         receiptId,
+        credentialId: Number(dataFormatId),
         points: Number(points).toString(),
         dataFormatId: Number(dataFormatId).toString(),
         state: ExchangeState.Idle,
