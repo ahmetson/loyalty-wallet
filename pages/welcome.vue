@@ -96,6 +96,7 @@ definePageMeta({
       <div class="w-[60%]">
         <UiProgress v-model="progress" />
       </div>
+      <TextMuted>Init circuits db...</TextMuted>
     </div>
   </div>
 </template>

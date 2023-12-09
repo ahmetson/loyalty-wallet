@@ -80,6 +80,7 @@ onMounted(() => {
       <div class="w-[60%]">
         <UiProgress v-model="progress" />
       </div>
+      <TextMuted>Loading circuits...</TextMuted>
     </div>
     <Footer v-if="progress === 100" />
   </div>
