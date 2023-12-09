@@ -92,7 +92,7 @@ definePageMeta({
       </UiButton>
     </div>
 
-    <div v-else class="w-full flex items-center justify-center">
+    <div v-else class="w-full flex flex-col items-center justify-center">
       <div class="w-[60%]">
         <UiProgress v-model="progress" />
       </div>
