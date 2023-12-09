@@ -119,6 +119,11 @@ export default defineNuxtConfig({
     plugins: [nodePolyfills({
       // Whether to polyfill `node:` protocol imports.
       protocolImports: true,
+      globals: {
+        Buffer: true, // can also be 'build', 'dev', or false
+        global: true,
+        process: true,
+      },
     })],
     optimizeDeps: {
       esbuildOptions: {

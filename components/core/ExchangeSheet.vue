@@ -1,9 +1,19 @@
 <script setup lang="ts">
+import { Buffer } from 'node:buffer'
 import { core } from '@0xpolygonid/js-sdk'
 import type { W3CCredential, ZeroKnowledgeProofRequest } from '@0xpolygonid/js-sdk'
+import { encrypt as ecEncrypt } from 'eccrypto'
+import { ethers } from 'ethers'
 import { ExchangeState } from '.'
 import type { Exchange } from '~/types/exchange'
 import { proofRequests } from '~/lib/proof-requests'
+
+interface PassedEcies {
+  iv: string
+  ephemPublicKey: string
+  ciphertext: string
+  mac: string
+}
 
 const props = defineProps<{
   exchange: Exchange
@@ -46,8 +56,22 @@ async function sendProof() {
   if (!response)
     throw new Error('Proof generation blocked')
   console.log(response.proof, exchange.value.user, exchange.value.receiptId, 1)
-  const result = await contract.submitPersonalData(props.exchange.shop, props.exchange.receiptId, JSON.stringify(response.proof))
-  console.log(result, response.proof, response.sigProofOk)
+
+  const pubKeyBuffer = Buffer.from(exchange.value.pubKey.substring(2), 'hex')
+
+  console.log('pub key', exchange.value.pubKey)
+
+  const cipher = await ecEncrypt(pubKeyBuffer, Buffer.from(JSON.stringify(response.proof)))
+
+  const cipherText: PassedEcies = {
+    ciphertext: ethers.hexlify(cipher.ciphertext),
+    iv: ethers.hexlify(cipher.iv),
+    ephemPublicKey: ethers.hexlify(cipher.ephemPublicKey),
+    mac: ethers.hexlify(cipher.mac),
+  }
+
+  const result = await contract.submitPersonalData(props.exchange.shop, props.exchange.receiptId, JSON.stringify(cipherText))
+  console.log(result, props.exchange.shop, props.exchange.receiptId, JSON.stringify(cipherText))
   exchange.value.state = ExchangeState.Await
 }
 

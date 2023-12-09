@@ -1,27 +1,53 @@
 export const abi = `[
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "EmptyArgs",
     "type": "error"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "EmptySource",
     "type": "error"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "NoInlineSecrets",
     "type": "error"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "OnlyRouterCanFulfill",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "length",
+        "type": "uint256"
+      }
+    ],
+    "name": "StringsInsufficientHexLength",
     "type": "error"
   },
   {
@@ -69,6 +95,12 @@ export const abi = `[
         "internalType": "uint64",
         "name": "dataFormatId",
         "type": "uint64"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "pubKey",
+        "type": "bytes"
       }
     ],
     "name": "AnnounceLoyaltyPoints",
@@ -246,7 +278,9 @@ export const abi = `[
       }
     ],
     "name": "addCredential",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -264,7 +298,9 @@ export const abi = `[
       }
     ],
     "name": "addShop",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -289,28 +325,24 @@ export const abi = `[
         "internalType": "uint64",
         "name": "credentialId",
         "type": "uint64"
+      },
+      {
+        "internalType": "bytes",
+        "name": "pubKey",
+        "type": "bytes"
       }
     ],
     "name": "announceLoyaltyPoints",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "caringSupporter",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
+    "inputs": [
+      
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "chainLinkDonId",
     "outputs": [
       {
@@ -323,7 +355,9 @@ export const abi = `[
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "chainLinkRouter",
     "outputs": [
       {
@@ -336,7 +370,9 @@ export const abi = `[
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "chainLinkSubId",
     "outputs": [
       {
@@ -346,6 +382,63 @@ export const abi = `[
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "buffer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "convert",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "num",
+        "type": "uint256"
+      }
+    ],
+    "name": "convert",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "convert",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -368,7 +461,9 @@ export const abi = `[
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "credentialTypeAmount",
     "outputs": [
       {
@@ -427,7 +522,9 @@ export const abi = `[
       }
     ],
     "name": "deleteCredential",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -476,7 +573,9 @@ export const abi = `[
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "gasLimit",
     "outputs": [
       {
@@ -507,66 +606,22 @@ export const abi = `[
       }
     ],
     "name": "handleOracleFulfillment",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "jsSource",
     "outputs": [
       {
         "internalType": "string",
         "name": "",
         "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "lockedNfts",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "lockedTokens",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -597,7 +652,9 @@ export const abi = `[
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "owner",
     "outputs": [
       {
@@ -607,52 +664,6 @@ export const abi = `[
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "nftAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "recoverUserNft",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "recoverUserToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -669,7 +680,9 @@ export const abi = `[
       }
     ],
     "name": "rejectExchange",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -682,14 +695,20 @@ export const abi = `[
       }
     ],
     "name": "removeShop",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      
+    ],
     "name": "removeShop",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -720,39 +739,15 @@ export const abi = `[
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "setCaringSupporter",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "string",
         "name": "_source",
         "type": "string"
       }
     ],
     "name": "setJsSource",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_userInterface",
-        "type": "address"
-      }
+    "outputs": [
+      
     ],
-    "name": "setUserInterface",
-    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -794,7 +789,9 @@ export const abi = `[
       }
     ],
     "name": "submitPersonalData",
-    "outputs": [],
+    "outputs": [
+      
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -807,21 +804,10 @@ export const abi = `[
       }
     ],
     "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "userInterface",
     "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
+      
     ],
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]`

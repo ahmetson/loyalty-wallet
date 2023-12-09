@@ -5,6 +5,7 @@ export interface Exchange {
   user: string
   receiptId: string
   credentialId: number
+  pubKey: string
   points: string
   dataFormatId: string
   state: ExchangeState

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { BytesLike } from 'ethers'
 import { ExchangeState } from '~/components/core'
 import { Code } from '~/components/typography'
 import { useToast } from '~/components/ui/toast/use-toast'
@@ -23,14 +24,15 @@ onMounted(() => {
   console.log(config)
   if (!contract)
     throw new Error('Contract not defined')
-  contract.on(contract.filters.AnnounceLoyaltyPoints, (shop: string, user: string, receiptId: string, points: bigint, dataFormatId: bigint) => {
-    console.log(shop, typeof shop, user, typeof user, receiptId, typeof receiptId, points, typeof points, dataFormatId, typeof dataFormatId)
+  contract.on(contract.filters.AnnounceLoyaltyPoints, (shop: string, user: string, receiptId: string, points: bigint, dataFormatId: bigint, pubKey: string) => {
+    console.log(shop, typeof shop, user, typeof user, receiptId, typeof receiptId, points, typeof points, dataFormatId, typeof dataFormatId, typeof pubKey, pubKey)
     if (user === wallet.address) {
       console.log('received')
       const exchange = ref<Exchange>({
         shop,
         user,
         receiptId,
+        pubKey,
         credentialId: Number(dataFormatId),
         points: Number(points).toString(),
         dataFormatId: Number(dataFormatId).toString(),
