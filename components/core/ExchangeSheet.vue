@@ -26,18 +26,21 @@ const exchange = computed<Exchange>({
   },
 })
 
+const proofReq = computed<ZeroKnowledgeProofRequest>(() => {
+  return proofRequests.get(exchange.value.credentialId) as ZeroKnowledgeProofRequest
+})
+
 const credential = computed<W3CCredential>(() => {
   return credentials.value.find((v) => {
     const credId = v.credentialSubject.id as string
-    return credId.slice(14) === currentAccount.did.id && v.type[1] === 'KYCAgeCredential'
+    return credId.slice(14) === currentAccount.did.id && v.type[1] === proofReq.value.query.type
   }) as W3CCredential
 })
 
 async function sendProof() {
   exchange.value.state = ExchangeState.Proof
   console.log('click')
-  const proofReq = proofRequests.get(exchange.value.credentialId) as ZeroKnowledgeProofRequest
-  const response = await generateProof(credential.value, proofReq, new core.DID(issuers.value.find((v) => {
+  const response = await generateProof(credential.value, proofReq.value, new core.DID(issuers.value.find((v) => {
     return v.did.id === credential.value.issuer.slice(14)
   })?.did))
   if (!response)

@@ -18,24 +18,23 @@ export const proofRequests = new Map<number, ZeroKnowledgeProofRequest>([
     },
   }],
   [2, {
+    circuitId: 'credentialAtomicQuerySigV2',
     id: 2,
-    circuitId: CircuitId.AtomicQuerySigV2,
-    optional: false,
     query: {
-      allowedIssuers: ['*'],
-      type: 'KYCCountryOfResidenceCredential',
-      context:
-      'https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v3.json-ld',
+      allowedIssuers: [
+        '*',
+      ],
+      context: 'https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v4.jsonld',
       credentialSubject: {
         countryCode: {
           $in: [
             84,
-            92,
-            93,
+            91,
             7,
           ],
         },
       },
+      type: 'KYCCountryOfResidenceCredential',
     },
   }],
 ])
