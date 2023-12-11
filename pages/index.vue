@@ -16,6 +16,14 @@ const { wallet } = useWallet()
           </TextP>
         </div>
       </div>
+      <div>
+        <TextMuted>
+          * All the transactions while interacting with Loyalty app are free.
+        </TextMuted>
+        <TextMuted>
+          * All your data is only saved in your device, if you lose your phone or the app, you will have to submit your data in exchange for Loyalty pts again.
+        </TextMuted>
+      </div>
     </div>
   </div>
 </template>

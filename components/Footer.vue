@@ -16,7 +16,7 @@ const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
             <div class="i-carbon:status-change text-xl" />
             <div v-if="exchanges.filter(v => [ExchangeState.Idle].includes(v.state)).length > 0" class="absolute w-[12px] h-[12px] rounded-full bg-accent animate-ping top-0 right-[30%]" />
             <TextSmall>
-              Loyalty
+              Announcements
             </TextSmall>
           </div>
         </UiButton>

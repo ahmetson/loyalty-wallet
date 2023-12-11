@@ -6,10 +6,10 @@ const { wallet } = useWallet()
 const pointsBalance = ref(0)
 
 onMounted(async () => {
-  pointsBalance.value = Number(await contract.loyaltyPoints('0x02eC83B3666927431faC8Dcb2C490a1a15DDe2eb', wallet.address))
+  pointsBalance.value = Number(await contract.loyaltyPoints('0x80Cbc1f7fd60B7026C0088e5eD58Fc6Ce1180141', wallet.address))
 
   contract.on('Exchanged', async () => {
-    pointsBalance.value = Number(await contract.loyaltyPoints('0x02eC83B3666927431faC8Dcb2C490a1a15DDe2eb', wallet.address))
+    pointsBalance.value = Number(await contract.loyaltyPoints('0x80Cbc1f7fd60B7026C0088e5eD58Fc6Ce1180141', wallet.address))
   })
 })
 </script>

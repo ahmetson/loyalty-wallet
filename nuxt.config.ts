@@ -83,6 +83,9 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
       ],
+      script: [
+        { src: 'https://unpkg.com/eccrypto-js@5.3.0/dist/umd/index.min.js' },
+      ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: 'Web3 Loyalty system' },

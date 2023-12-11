@@ -2,7 +2,6 @@
 import { Buffer } from 'node:buffer'
 import { core } from '@0xpolygonid/js-sdk'
 import type { W3CCredential, ZeroKnowledgeProofRequest } from '@0xpolygonid/js-sdk'
-import { encrypt as ecEncrypt } from 'eccrypto'
 import { ethers } from 'ethers'
 import { ExchangeState } from '.'
 import type { Exchange } from '~/types/exchange'
@@ -21,7 +20,6 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['update:exchange'])
-const { $emit } = useNuxtApp()
 const { contract } = useLoyaltyContract()
 const { currentAccount, issuers, credentials, generateProof } = usePolygonID()
 
@@ -61,7 +59,7 @@ async function sendProof() {
 
   console.log('pub key', exchange.value.pubKey)
 
-  const cipher = await ecEncrypt(pubKeyBuffer, Buffer.from(JSON.stringify(response.proof)))
+  const cipher = await window.eccryptoJS.encrypt(pubKeyBuffer, Buffer.from(JSON.stringify(response.proof)))
 
   const cipherText: PassedEcies = {
     ciphertext: ethers.hexlify(cipher.ciphertext),
@@ -120,8 +118,8 @@ onErrorCaptured(() => {
             <TextH4 class="m-0">
               Exchange your data:
             </TextH4>
-            <TextLead>
-              * BIRTHDAY
+            <TextLead v-for="key in Object.keys(proofReq.query.credentialSubject)" :key="key" class="capitalize">
+              * {{ key }}
             </TextLead>
             <TextH4 class="[&:not(:first-child)]:mt-2">
               for {{ exchange.points }} points

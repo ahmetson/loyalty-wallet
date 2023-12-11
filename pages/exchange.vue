@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { ZeroKnowledgeProofRequest } from '@0xpolygonid/js-sdk'
 import type { Exchange } from '~/types/exchange'
 import ExchangeSheet from '~/components/core/ExchangeSheet.vue'
 import { ExchangeState } from '~/components/core'
+import { proofRequests } from '~/lib/proof-requests'
 
 const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
 </script>
@@ -9,17 +11,17 @@ const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
 <template>
   <div class="h-full flex py-4 flex-col gap-3 px-6">
     <div class="flex items-center justify-between mb-3">
-      <TextH2>Exchanges</TextH2>
+      <TextH2>Announcements</TextH2>
     </div>
     <div class="flex items-center justify-between">
       <TextH3>Requested</TextH3>
     </div>
     <div v-if="exchanges.filter((v) => ![ExchangeState.Error, ExchangeState.Rejected, ExchangeState.Success].includes(v.state)).length > 0" class="w-full flex flex-col gap-3">
-      <div v-for="exchange in exchanges.filter((v) => ![ExchangeState.Error, ExchangeState.Rejected, ExchangeState.Success].includes(v.state))" :key="exchange.receiptId" class="flex flex-col bg-gradient-to-br from-emerald-700 to-teal-800 dark:to-transparent px-3 py-3 rounded-xl gap-3">
+      <div v-for="exchange in exchanges.filter((v) => ![ExchangeState.Error, ExchangeState.Rejected, ExchangeState.Success].includes(v.state)).reverse()" :key="exchange.receiptId" class="flex flex-col bg-gradient-to-br from-emerald-700 to-teal-800 dark:to-transparent px-3 py-3 rounded-xl gap-3">
         <ExchangeSheet :exchange="exchange" :default-open="false">
           <div class="flex flex-col sm:flex-row justify-between items-center mb-2 text-white">
             <TextH4 class="truncate">
-              KYCAgeCredential
+              {{ (proofRequests.get(exchange.credentialId) as ZeroKnowledgeProofRequest).query.type }}
             </TextH4>
             <div class="flex flex-col sm:flex-row items-center gap-2">
               <TextSmall>
@@ -61,7 +63,7 @@ const exchanges = useLocalStorage<Exchange[]>('exchanges', [])
       </TextH3>
     </div>
     <div v-if="exchanges.filter(v => [ExchangeState.Error, ExchangeState.Rejected, ExchangeState.Success].includes(v.state)).length > 0" class="w-full flex flex-col gap-3">
-      <div v-for="exchange in exchanges.filter(v => [ExchangeState.Error, ExchangeState.Rejected, ExchangeState.Success].includes(v.state))" :key="exchange.receiptId" class="flex flex-col bg-gradient-to-br from-emerald-600 to-teal-800 dark:to-transparent px-3 py-3 rounded-xl gap-3 filter-grayscale">
+      <div v-for="exchange in exchanges.filter(v => [ExchangeState.Error, ExchangeState.Rejected, ExchangeState.Success].includes(v.state)).reverse()" :key="exchange.receiptId" class="flex flex-col bg-gradient-to-br from-emerald-600 to-teal-800 dark:to-transparent px-3 py-3 rounded-xl gap-3 filter-grayscale">
         <ExchangeSheet :exchange="exchange" :default-open="false">
           <div class="flex flex-col sm:flex-row justify-between items-center mb-2 text-white">
             <TextH4 class="truncate">

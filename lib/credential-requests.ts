@@ -34,7 +34,7 @@ export const credentials: Credential[] = [
     name: 'KYCCountryOfResidenceCredential',
     fields: [{
       name: 'countryCode',
-      description: 'Country of Residence (Phone code number)',
+      description: 'Country of Residence',
       type: 'text',
       mask: '####',
       parse: (v: string) => Number.parseInt(v),

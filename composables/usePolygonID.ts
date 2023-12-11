@@ -34,6 +34,8 @@ export default () => {
   async function generateProof(credential: W3CCredential, proofReq: ZeroKnowledgeProofRequest, issuerDID: core.DID) {
     const { wallet: idWallet, dataStorage, proofService } = PolygonIdService.getExtensionServiceInstance()
 
+    console.log(credential, proofReq)
+
     try {
       const res = await idWallet?.addCredentialsToMerkleTree(
         [credential],
