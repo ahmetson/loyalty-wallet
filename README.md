@@ -1,3 +1,5 @@
+> Made by [picunada](https://github.com/picunada)
+
 # Loyalty system
 
 Loyalty system app is WEB3 loyalty system to cooperate brands and clients ....
